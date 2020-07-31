@@ -13,6 +13,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   texto = '';
 
   mensajesSubscription: Subscription;
+  mensajesGlobales: Subscription;
   elemento: HTMLElement;
   mensajes: any[] = [];
 
@@ -29,10 +30,21 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.elemento.scrollTop = this.elemento.scrollHeight;
         }, 50);
       });
+
+    this.mensajesGlobales = this.chatService
+      .getGlobalMessages()
+      .subscribe((msg) => {
+        this.mensajes.push(msg);
+        setTimeout(() => {
+          this.elemento.scrollTop = this.elemento.scrollHeight;
+        }, 50);
+      });
+    console.log(this.mensajes);
   }
 
   ngOnDestroy() {
     this.mensajesSubscription.unsubscribe();
+    this.mensajesGlobales.unsubscribe();
   }
 
   enviar() {
