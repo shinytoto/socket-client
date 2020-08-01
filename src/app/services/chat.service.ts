@@ -29,4 +29,12 @@ export class ChatService {
   getGlobalMessages() {
     return this.webSocketService.listen('mensaje-global');
   }
+
+  getUsuariosActivos() {
+    return this.webSocketService.listen('usuarios-activos');
+  }
+
+  emitirUsuariosActivos() {
+    this.webSocketService.emitir('obtener-usuarios');
+  }
 }

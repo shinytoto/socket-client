@@ -39,7 +39,6 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.elemento.scrollTop = this.elemento.scrollHeight;
         }, 50);
       });
-    console.log(this.mensajes);
   }
 
   ngOnDestroy() {

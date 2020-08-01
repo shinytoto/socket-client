@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 
 // Models
@@ -11,7 +12,7 @@ export class WebsocketService {
   public socketStatus = false;
   public usuario: Usuario;
 
-  constructor(private socket: Socket) {
+  constructor(private socket: Socket, private _router: Router) {
     this.cargarStorage();
     this.checkStatus();
   }
@@ -21,6 +22,7 @@ export class WebsocketService {
     this.socket.on('connect', () => {
       console.log('Conectado al Servidor.');
       this.socketStatus = true;
+      this.cargarStorage(); // ! Importante: Cargar storage al checkear servidor
     });
 
     this.socket.on('disconnect', () => {
@@ -53,6 +55,18 @@ export class WebsocketService {
     // this.socket.emit('configurar-usuario', { nombre }, (response) => {
     //   console.log(response);
     // });
+  }
+
+  logoutWebSocket() {
+    this.usuario = null;
+    localStorage.removeItem('usuario');
+
+    const payload = {
+      nombre: 'sin-nombre',
+    };
+
+    this.emitir('configurar-usuario', payload, () => {});
+    this._router.navigateByUrl('/');
   }
 
   getUsuario() {
